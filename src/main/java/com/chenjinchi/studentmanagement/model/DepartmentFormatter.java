@@ -11,26 +11,28 @@ import java.util.Locale;
 
 @Component
 public class DepartmentFormatter implements Formatter<Department> {
-    private final StudentRepository students;
 
-    @Autowired
-    public DepartmentFormatter(StudentRepository students) {
-        this.students = students;
-    }
+	private final StudentRepository students;
 
-    @Override
-    public Department parse(String s, Locale locale) throws ParseException {
-        Collection<Department> departments = this.students.findDepartment();
-        for (Department department : departments) {
-            if (department.getName().equals(s)) {
-                return department;
-            }
-        }
-        throw new ParseException("department not found: " + s, 0);
-    }
+	@Autowired
+	public DepartmentFormatter(StudentRepository students) {
+		this.students = students;
+	}
 
-    @Override
-    public String print(Department department, Locale locale) {
-        return department.getName();
-    }
+	@Override
+	public Department parse(String s, Locale locale) throws ParseException {
+		Collection<Department> departments = this.students.findDepartment();
+		for (Department department : departments) {
+			if (department.getName().equals(s)) {
+				return department;
+			}
+		}
+		throw new ParseException("department not found: " + s, 0);
+	}
+
+	@Override
+	public String print(Department department, Locale locale) {
+		return department.getName();
+	}
+
 }

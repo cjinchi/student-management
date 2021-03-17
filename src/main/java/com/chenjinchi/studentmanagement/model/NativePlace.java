@@ -6,4 +6,5 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "native_places")
 public class NativePlace extends EnumEntity {
+
 }

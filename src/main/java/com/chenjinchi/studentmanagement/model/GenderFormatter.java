@@ -11,26 +11,28 @@ import java.util.Locale;
 
 @Component
 public class GenderFormatter implements Formatter<Gender> {
-    private final StudentRepository students;
 
-    @Autowired
-    public GenderFormatter(StudentRepository students){
-        this.students = students;
-    }
+	private final StudentRepository students;
 
-    @Override
-    public Gender parse(String s, Locale locale) throws ParseException {
-        Collection<Gender> genders = this.students.findGender();
-        for(Gender gender:genders){
-            if(gender.getName().equals(s)){
-                return gender;
-            }
-        }
-        throw new ParseException("department not found: " + s, 0);
-    }
+	@Autowired
+	public GenderFormatter(StudentRepository students) {
+		this.students = students;
+	}
 
-    @Override
-    public String print(Gender gender, Locale locale) {
-        return gender.getName();
-    }
+	@Override
+	public Gender parse(String s, Locale locale) throws ParseException {
+		Collection<Gender> genders = this.students.findGender();
+		for (Gender gender : genders) {
+			if (gender.getName().equals(s)) {
+				return gender;
+			}
+		}
+		throw new ParseException("department not found: " + s, 0);
+	}
+
+	@Override
+	public String print(Gender gender, Locale locale) {
+		return gender.getName();
+	}
+
 }

@@ -95,4 +95,5 @@ public class Student implements Serializable {
 	public void setDepartment(Department department) {
 		this.department = department;
 	}
+
 }

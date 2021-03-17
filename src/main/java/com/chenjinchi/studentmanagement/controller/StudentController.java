@@ -45,7 +45,7 @@ public class StudentController {
 	public String listAllStudents(Map<String, Object> model) {
 		Collection<Student> results = this.students.findAllStudents();
 		model.put("selections", results);
-		model.put("title","全部有"+results.size()+"名学生");
+		model.put("title", "全部有" + results.size() + "名学生");
 		return "students/studentsList";
 	}
 
@@ -62,7 +62,8 @@ public class StudentController {
 		if (studentName == null) {
 			studentName = "";
 			results = this.students.findAllStudents();
-		}else{
+		}
+		else {
 			results = this.students.findByKeyword(studentName);
 		}
 
@@ -72,7 +73,7 @@ public class StudentController {
 		}
 		else {
 			model.put("selections", results);
-			model.put("title","关键字“"+studentName+"”共有"+results.size()+"个搜索结果");
+			model.put("title", "关键字“" + studentName + "”共有" + results.size() + "个搜索结果");
 			return "students/studentsList";
 		}
 
@@ -103,14 +104,14 @@ public class StudentController {
 		return "students/createOrUpdateForm";
 	}
 
-
-	@RequestMapping(value="/students/{studentId}/delete", method=GET)
+	@RequestMapping(value = "/students/{studentId}/delete", method = GET)
 	@ResponseBody
-	public String processDeleteRequest(@PathVariable("studentId") String studentId, Model model){
+	public String processDeleteRequest(@PathVariable("studentId") String studentId, Model model) {
 		Student student = this.students.findById(studentId);
-		if (student==null){
+		if (student == null) {
 			return "notfound";
-		}else{
+		}
+		else {
 			this.students.deleteStudent(studentId);
 			return "done";
 		}

@@ -5,5 +5,6 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "departments")
-public class Department extends EnumEntity{
+public class Department extends EnumEntity {
+
 }
