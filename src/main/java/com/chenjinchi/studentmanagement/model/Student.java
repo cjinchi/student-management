@@ -5,6 +5,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDate;
 
@@ -29,15 +30,20 @@ public class Student implements Serializable {
 
 	@Column(name = "birth_date")
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	@NotNull
 	private LocalDate birthDate;
 
-	// public Integer getId() {
-	// return id;
-	// }
-	//
-	// public void setId(Integer id) {
-	// this.id = id;
-	// }
+	@Column(name="gender")
+	@NotEmpty
+	private String gender;
+
+	@Column(name = "native_place")
+	@NotEmpty
+	private String nativePlace;
+
+	@Column(name="department")
+	@NotEmpty
+	private String department;
 
 	public String getId() {
 		return id;
@@ -63,9 +69,31 @@ public class Student implements Serializable {
 		this.birthDate = birthDate;
 	}
 
-	@Override
-	public String toString() {
-		return new ToStringCreator(this).append("new", this.id == null).toString();
+	public static long getSerialVersionUID() {
+		return serialVersionUID;
 	}
 
+	public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+
+	public String getNativePlace() {
+		return nativePlace;
+	}
+
+	public void setNativePlace(String nativePlace) {
+		this.nativePlace = nativePlace;
+	}
+
+	public String getDepartment() {
+		return department;
+	}
+
+	public void setDepartment(String department) {
+		this.department = department;
+	}
 }

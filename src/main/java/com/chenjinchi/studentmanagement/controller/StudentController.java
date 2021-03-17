@@ -25,9 +25,9 @@ public class StudentController {
 
 	@GetMapping("/")
 	public String listAllStudents(Map<String, Object> model) {
-		Collection<Student> results = this.students.findByName("");
+		Collection<Student> results = this.students.findAllStudents();
 		model.put("selections", results);
-		model.put("title","全部学生");
+		model.put("title","全部有"+results.size()+"名学生");
 		return "students/studentsList";
 	}
 
@@ -40,10 +40,14 @@ public class StudentController {
 	@GetMapping("/students")
 	public String processSearchForm(Student student, BindingResult result, Map<String, Object> model) {
 		String studentName = student.getName();
+		Collection<Student> results = null;
 		if (studentName == null) {
 			studentName = "";
+			results = this.students.findAllStudents();
+		}else{
+			results = this.students.findByKeyword(studentName);
 		}
-		Collection<Student> results = this.students.findByName(studentName);
+
 		if (results.isEmpty()) {
 			result.rejectValue("name", "notFound", "not found");
 			return "students/findStudents";

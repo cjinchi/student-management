@@ -11,19 +11,23 @@ import java.util.Collection;
 
 public interface StudentRepository extends Repository<Student, Integer> {
 
-	@Query("SELECT student FROM Student student WHERE student.id =:studentId")
-	@Transactional(readOnly = true)
-	Student findById(@Param("studentId") String studentId);
+    @Query("SELECT student FROM Student student WHERE student.id =:studentId")
+    @Transactional(readOnly = true)
+    Student findById(@Param("studentId") String studentId);
 
-	@Query("SELECT student FROM Student student WHERE lower(student.name) LIKE lower(concat('%',:name,'%') ) ")
-	@Transactional(readOnly = true)
-	Collection<Student> findByName(@Param("name") String name);
+    @Query("SELECT student FROM Student student")
+    @Transactional(readOnly = true)
+    Collection<Student> findAllStudents();
 
-	void save(Student student);
+    @Query("SELECT student FROM Student student WHERE lower(concat(student.id,student.name,student.nativePlace,student.gender,student.department) ) LIKE lower(concat('%',:keyword,'%') ) ")
+    @Transactional(readOnly = true)
+    Collection<Student> findByKeyword(@Param("keyword") String keyword);
 
-	@Modifying
-	@Transactional
-	@Query("DELETE FROM Student student where student.id = :id")
-	void deleteStudent(@Param("id") String id);
+    void save(Student student);
+
+    @Modifying
+    @Transactional
+    @Query("DELETE FROM Student student where student.id = :id")
+    void deleteStudent(@Param("id") String id);
 
 }

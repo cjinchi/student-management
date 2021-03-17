@@ -3,10 +3,14 @@ DROP TABLE Students IF EXISTS ;
 CREATE TABLE students(
     id VARCHAR(30) PRIMARY KEY,
     name VARCHAR(30),
-    birth_date DATE
+    birth_date DATE,
+    gender VARCHAR (30),
+    native_place VARCHAR (30),
+    department VARCHAR (50)
 );
 CREATE INDEX students_id ON students (id);
 CREATE INDEX students_name ON students (name);
+CREATE INDEX students_department ON students (department);
 
 -- DROP TABLE vet_specialties IF EXISTS;
 -- DROP TABLE vets IF EXISTS;
