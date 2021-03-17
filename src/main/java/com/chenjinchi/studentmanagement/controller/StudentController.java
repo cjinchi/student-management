@@ -1,5 +1,8 @@
 package com.chenjinchi.studentmanagement.controller;
 
+import com.chenjinchi.studentmanagement.model.Department;
+import com.chenjinchi.studentmanagement.model.Gender;
+import com.chenjinchi.studentmanagement.model.NativePlace;
 import com.chenjinchi.studentmanagement.model.Student;
 import com.chenjinchi.studentmanagement.repository.StudentRepository;
 import org.springframework.stereotype.Controller;
@@ -21,6 +24,21 @@ public class StudentController {
 
 	public StudentController(StudentRepository studentService) {
 		this.students = studentService;
+	}
+
+	@ModelAttribute("genders")
+	public Collection<Gender> populateGenders() {
+		return this.students.findGender();
+	}
+
+	@ModelAttribute("departments")
+	public Collection<Department> populateDepartments() {
+		return this.students.findDepartment();
+	}
+
+	@ModelAttribute("native_places")
+	public Collection<NativePlace> populateNativePlaces() {
+		return this.students.findNativePlace();
 	}
 
 	@GetMapping("/")
@@ -109,14 +127,19 @@ public class StudentController {
 	@PostMapping("/students/{id}/edit")
 	public String processUpdateStudentForm(@Valid Student student, BindingResult result,
 			@PathVariable("id") String id) {
+		System.out.println("here1");
 		if (result.hasErrors()) {
+			System.out.println("5");
 			return "students/createOrUpdateForm";
 		}
 		else {
+			System.out.println("here2");
 			if (!id.equals(student.getId())) {
 				this.students.deleteStudent(id);
 			}
+			System.out.println("here3");
 			this.students.save(student);
+			System.out.println("here4");
 			return "redirect:/students/" + student.getId();
 		}
 	}

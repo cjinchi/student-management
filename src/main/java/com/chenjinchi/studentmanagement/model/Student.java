@@ -1,6 +1,5 @@
 package com.chenjinchi.studentmanagement.model;
 
-import org.springframework.core.style.ToStringCreator;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -33,17 +32,17 @@ public class Student implements Serializable {
 	@NotNull
 	private LocalDate birthDate;
 
-	@Column(name="gender")
-	@NotEmpty
-	private String gender;
+	@ManyToOne
+	@JoinColumn(name = "gender_id")
+	private Gender gender;
 
-	@Column(name = "native_place")
-	@NotEmpty
-	private String nativePlace;
+	@ManyToOne
+	@JoinColumn(name = "native_place_id")
+	private NativePlace nativePlace;
 
-	@Column(name="department")
-	@NotEmpty
-	private String department;
+	@ManyToOne
+	@JoinColumn(name = "department_id")
+	private Department department;
 
 	public String getId() {
 		return id;
@@ -73,27 +72,27 @@ public class Student implements Serializable {
 		return serialVersionUID;
 	}
 
-	public String getGender() {
+	public Gender getGender() {
 		return gender;
 	}
 
-	public void setGender(String gender) {
+	public void setGender(Gender gender) {
 		this.gender = gender;
 	}
 
-	public String getNativePlace() {
+	public NativePlace getNativePlace() {
 		return nativePlace;
 	}
 
-	public void setNativePlace(String nativePlace) {
+	public void setNativePlace(NativePlace nativePlace) {
 		this.nativePlace = nativePlace;
 	}
 
-	public String getDepartment() {
+	public Department getDepartment() {
 		return department;
 	}
 
-	public void setDepartment(String department) {
+	public void setDepartment(Department department) {
 		this.department = department;
 	}
 }

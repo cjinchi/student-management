@@ -4,13 +4,29 @@ CREATE TABLE students(
     id VARCHAR(30) PRIMARY KEY,
     name VARCHAR(30),
     birth_date DATE,
-    gender VARCHAR (30),
-    native_place VARCHAR (30),
-    department VARCHAR (50)
+    gender_id INTEGER NOT NULL,
+    native_place_id INTEGER NOT NULL ,
+    department_id INTEGER NOT NULL
 );
 CREATE INDEX students_id ON students (id);
 CREATE INDEX students_name ON students (name);
-CREATE INDEX students_department ON students (department);
+CREATE INDEX students_department_id ON students (department_id);
+CREATE INDEX students_native_place_id ON students (native_place_id);
+
+CREATE TABLE departments (
+  id   INTEGER IDENTITY PRIMARY KEY,
+  name VARCHAR(50)
+);
+
+CREATE TABLE native_places (
+  id   INTEGER IDENTITY PRIMARY KEY,
+  name VARCHAR(30)
+);
+
+CREATE TABLE genders (
+  id   INTEGER IDENTITY PRIMARY KEY,
+  name VARCHAR(30)
+);
 
 -- DROP TABLE vet_specialties IF EXISTS;
 -- DROP TABLE vets IF EXISTS;
