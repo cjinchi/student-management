@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+
+<html xmlns:th="https://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'students')}">
+
+<body>
+<h1 th:text="${title}">学生列表</h1>
+<a th:text="'添加新学生'" th:href="@{/students/new}"></a>
+<br>
+<!--<div class="form-group">-->
+<!--    <div class="control-group" id="studentNameGroup">-->
+<!--        <div class="col-sm-2">-->
+<!--            <h1>学生列表</h1>-->
+<!--        </div>-->
+<!--        <div class="col-sm-offset-8 col-sm-2">-->
+<!--            <a th:text="'添加学生'" th:href="@{/students/new}"></a>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+
+
+<table id="students" class="table table-striped">
+    <thead>
+    <tr>
+        <th style="width: 130px;">学号</th>
+        <th style="width: 70px;">姓名</th>
+        <th style="width: 130px;">出生日期</th>
+        <th style="width: 70px;"></th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="student : ${selections}">
+        <td>
+            <a th:href="@{/students/__${student.id}__}" th:text="${student.id}"></a>
+        </td>
+        <!--        <td th:text="${student.studentId}" />-->
+        <td th:text="${student.name}"></td>
+        <td th:text="${student.birthDate}"></td>
+        <td>
+            <a th:href="@{/students/__${student.id}__/edit}" >
+                <button th:text="'编辑'"></button>
+            </a>
+        </td>
+        <td>
+            <a>
+                <button  th:onclick="confirmDelete([[${student.id}]])" th:text="'删除'"></button>
+            </a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<script>
+    function confirmDelete(student_id) {
+        var r = confirm("确认要删除" + student_id + "吗？");
+        if (r === true) {
+            var httpRequest = new XMLHttpRequest();
+            httpRequest.open('GET', '/students/'+student_id+'/delete', true);
+            httpRequest.send();
+            httpRequest.onreadystatechange = function () {
+                if (httpRequest.readyState === 4 && httpRequest.status === 200) {
+                    alert(student_id + '已删除。');
+                    window.location.reload();
+                }
+            };
+        }
+    }
+
+
+</script>
+
+</body>
+
+
+</html>
