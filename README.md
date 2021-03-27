@@ -14,7 +14,7 @@
 1. 将系统数据库由H2修改为MySQL，MySQL使用docker镜像搭建。MySQL中数据表结构与实验1相同，此处不再赘述。
 2. 使用jib插件将系统容器化。
 3. 接入HA-Proxy搭建一个水平扩展的集群系统。
-4. 接入Redis缓存。Redis使用docker镜像搭建。
+4. 增加`StudentService`类，接入Redis缓存。Redis使用docker镜像搭建。
 5. 使用Gatling压测工具进行性能测试。
 
 值得一提的是，为了更好的体现出实验结果，我们对系统做了一些修改：
