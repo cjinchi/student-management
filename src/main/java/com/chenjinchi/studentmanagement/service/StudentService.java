@@ -16,44 +16,46 @@ import java.util.List;
 
 @Service
 public class StudentService {
-    @Autowired
-    private StudentRepository repository;
 
-    @Cacheable(value = "gender")
-    public List<Gender> findGender() {
-        return this.repository.findGender();
-    }
+	@Autowired
+	private StudentRepository repository;
 
-    @Cacheable(value = "department")
-    public List<Department> findDepartment() {
-        return this.repository.findDepartment();
-    }
+	@Cacheable(value = "gender")
+	public List<Gender> findGender() {
+		return this.repository.findGender();
+	}
 
-    @Cacheable(value = "native_place")
-    public List<NativePlace> findNativePlace() {
-        return this.repository.findNativePlace();
-    }
+	@Cacheable(value = "department")
+	public List<Department> findDepartment() {
+		return this.repository.findDepartment();
+	}
 
-    public Student findById(String studentId) {
-        return this.repository.findById(studentId);
-    }
+	@Cacheable(value = "native_place")
+	public List<NativePlace> findNativePlace() {
+		return this.repository.findNativePlace();
+	}
 
-    @Cacheable(value = "all_student")
-    public Collection<Student> findAllStudents() {
-        return this.repository.findAllStudents();
-    }
+	public Student findById(String studentId) {
+		return this.repository.findById(studentId);
+	}
 
-    public Collection<Student> findByKeyword(String keyword) {
-        return this.repository.findByKeyword(keyword);
-    }
+	@Cacheable(value = "all_student")
+	public Collection<Student> findAllStudents() {
+		return this.repository.findAllStudents();
+	}
 
-    @CacheEvict(value = "all_student", allEntries = true)
-    public void save(Student student) {
-        this.repository.save(student);
-    }
+	public Collection<Student> findByKeyword(String keyword) {
+		return this.repository.findByKeyword(keyword);
+	}
 
-    @CacheEvict(value = "all_student", allEntries = true)
-    public void deleteStudent(String id) {
-        this.repository.deleteStudent(id);
-    }
+	@CacheEvict(value = "all_student", allEntries = true)
+	public void save(Student student) {
+		this.repository.save(student);
+	}
+
+	@CacheEvict(value = "all_student", allEntries = true)
+	public void deleteStudent(String id) {
+		this.repository.deleteStudent(id);
+	}
+
 }
