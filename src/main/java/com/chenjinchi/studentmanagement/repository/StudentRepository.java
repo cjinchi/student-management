@@ -31,7 +31,7 @@ public interface StudentRepository extends Repository<Student, Integer> {
 	@Transactional(readOnly = true)
 	Student findById(@Param("studentId") String studentId);
 
-	@Query("SELECT student FROM Student student")
+	@Query("SELECT student FROM Student student WHERE student.nativePlace.name LIKE '%guangdong%' OR student.department.name LIKE '%computer%' ORDER BY student.birthDate ASC")
 	@Transactional(readOnly = true)
 	Collection<Student> findAllStudents();
 

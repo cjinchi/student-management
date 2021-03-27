@@ -41,6 +41,7 @@ public class StudentService {
 
 	@Cacheable(value = "all_student")
 	public Collection<Student> findAllStudents() {
+		System.out.println("find all");
 		return this.repository.findAllStudents();
 	}
 

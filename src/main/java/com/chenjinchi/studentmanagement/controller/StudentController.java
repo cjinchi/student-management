@@ -15,6 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.validation.Valid;
 import java.util.Collection;
 import java.util.Map;
+import java.util.Arrays;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
@@ -43,11 +44,13 @@ public class StudentController {
 	}
 
 	@GetMapping("/")
+	@ResponseBody
 	public String listAllStudents(Map<String, Object> model) {
 		Collection<Student> results = this.students.findAllStudents();
-		model.put("selections", results);
-		model.put("title", "全部有" + results.size() + "名学生");
-		return "students/studentsList";
+		return Arrays.toString(results.toArray());
+		// model.put("selections", results);
+		// model.put("title", "全部有" + results.size() + "名学生");
+		// return "students/studentsList";
 	}
 
 	@GetMapping("/students/search")

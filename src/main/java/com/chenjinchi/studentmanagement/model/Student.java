@@ -96,4 +96,10 @@ public class Student implements Serializable {
 		this.department = department;
 	}
 
+	@Override
+	public String toString() {
+		return "Student{" + "id='" + id + '\'' + ", name='" + name + '\'' + ", birthDate=" + birthDate + ", gender="
+				+ gender + ", nativePlace=" + nativePlace + ", department=" + department + '}';
+	}
+
 }
