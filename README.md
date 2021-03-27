@@ -46,11 +46,11 @@ docker run -d --name student-with-cache-1 -p 8081:8080 --cpus=0.5 student-with-c
 
 每组配置使用Gatling测试5次，每次的`atOnceUsers`为100。
 
-实验的所有数据存放于`./raw_data`文件夹，实验使用的镜像存放于 [student-with-cache](https://hub.docker.com/r/ershierdu/student-with-cache)和[student-without-cache](https://hub.docker.com/r/ershierdu/student-without-cache)。
+实验使用的镜像存放于 [student-with-cache](https://hub.docker.com/r/ershierdu/student-with-cache)和[student-without-cache](https://hub.docker.com/r/ershierdu/student-without-cache)。
 
 ### 实验结果与分析
 
-我们对每种配置的5次测试的`mean response time`再求平均值，得到以以下数据
+实验的完整数据参见`./raw_data`文件夹。我们对每种配置的5次测试的`mean response time`再求平均值，得到以下数据
 
 | 配置                     | average(`mean response time`) |
 | ------------------------ | ----------------------------- |
