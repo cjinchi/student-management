@@ -5,6 +5,7 @@ import com.chenjinchi.studentmanagement.model.Gender;
 import com.chenjinchi.studentmanagement.model.NativePlace;
 import com.chenjinchi.studentmanagement.model.Student;
 import com.chenjinchi.studentmanagement.repository.StudentRepository;
+import com.chenjinchi.studentmanagement.service.StudentService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -20,9 +21,9 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 @Controller
 public class StudentController {
 
-	private final StudentRepository students;
+	private final StudentService students;
 
-	public StudentController(StudentRepository studentService) {
+	public StudentController(StudentService studentService) {
 		this.students = studentService;
 	}
 
