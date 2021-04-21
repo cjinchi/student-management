@@ -9,19 +9,21 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 public interface StudentRepository extends CrudRepository<Student, Integer> {
-    @Override
-    Iterable<Student> findAll();
 
-    @Override
-    Optional<Student> findById(Integer integer);
+	@Override
+	Iterable<Student> findAll();
 
-    @Query("SELECT student FROM Student student  WHERE lower(concat(student.studentId,student.name,student.nativePlace,student.gender,student.department) ) LIKE lower(concat('%',:query,'%') ) ")
-    @Transactional(readOnly = true)
-    Iterable<Student> findByQuery(@Param("query") String query);
+	@Override
+	Optional<Student> findById(Integer integer);
 
-    @Query(value="SELECT IDENTITY()",nativeQuery =true)
-    Integer getMaxId();
+	@Query("SELECT student FROM Student student  WHERE lower(concat(student.studentId,student.name,student.nativePlace,student.gender,student.department) ) LIKE lower(concat('%',:query,'%') ) ")
+	@Transactional(readOnly = true)
+	Iterable<Student> findByQuery(@Param("query") String query);
 
-    @Override
-    void delete(Student student);
+	@Query(value = "SELECT IDENTITY()", nativeQuery = true)
+	Integer getMaxId();
+
+	@Override
+	void delete(Student student);
+
 }
