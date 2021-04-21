@@ -1,148 +1,108 @@
 package com.chenjinchi.studentmanagement.controller;
 
-import com.chenjinchi.studentmanagement.model.Department;
-import com.chenjinchi.studentmanagement.model.Gender;
-import com.chenjinchi.studentmanagement.model.NativePlace;
 import com.chenjinchi.studentmanagement.model.Student;
 import com.chenjinchi.studentmanagement.repository.StudentRepository;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.IanaLinkRelations;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
-import javax.validation.Valid;
-import java.util.Collection;
-import java.util.Map;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
-@Controller
+@RestController
 public class StudentController {
 
-	private final StudentRepository students;
+    private final StudentRepository repository;
 
-	public StudentController(StudentRepository studentService) {
-		this.students = studentService;
-	}
+    public StudentController(StudentRepository repository) {
+        this.repository = repository;
+    }
 
-	@ModelAttribute("genders")
-	public Collection<Gender> populateGenders() {
-		return this.students.findGender();
-	}
+    @GetMapping("/students")
+    ResponseEntity<CollectionModel<EntityModel<Student>>> find(@RequestParam(name = "q",required = false) String q) {
+        Iterable<Student> studentsFound;
+        if(q==null){
+             studentsFound = repository.findAll();
+        }else{
+            studentsFound = repository.findByQuery(q);
+        }
+        List<EntityModel<Student>> students = StreamSupport.stream(studentsFound.spliterator(), false)
+                .map(student -> EntityModel.of(student,
+                        linkTo(methodOn(StudentController.class).findOne(student.getId())).withSelfRel(),
+                        linkTo(methodOn(StudentController.class).find(null)).withRel("students").expand()))
+                .collect(Collectors.toList());
 
-	@ModelAttribute("departments")
-	public Collection<Department> populateDepartments() {
-		return this.students.findDepartment();
-	}
+        return ResponseEntity.ok(CollectionModel.of(students, linkTo(methodOn(StudentController.class).find(q)).withSelfRel().expand()));
+    }
 
-	@ModelAttribute("native_places")
-	public Collection<NativePlace> populateNativePlaces() {
-		return this.students.findNativePlace();
-	}
+    @PostMapping("/students")
+    ResponseEntity<?> newStudent(@RequestBody Student student) {
+        Student savedStudent = repository.save(student);
+        EntityModel<Student> studentResource = EntityModel.of(savedStudent,
+                linkTo(methodOn(StudentController.class).findOne(savedStudent.getId())).withSelfRel());
+        try {
+            return ResponseEntity
+                    .created(new URI(studentResource.getRequiredLink(IanaLinkRelations.SELF).getHref()))
+                    .body(studentResource);
+        } catch (URISyntaxException e) {
+            return ResponseEntity.badRequest().body("Unable to create " + student);
+        }
+    }
 
-	@GetMapping("/")
-	public String listAllStudents(Map<String, Object> model) {
-		Collection<Student> results = this.students.findAllStudents();
-		model.put("selections", results);
-		model.put("title", "全部有" + results.size() + "名学生");
-		return "students/studentsList";
-	}
+    @GetMapping("/students/{id}")
+    ResponseEntity<EntityModel<Student>> findOne(@PathVariable Integer id) {
+        return repository.findById(id)
+                .map(student -> EntityModel.of(student,
+                        linkTo(methodOn(StudentController.class).findOne(student.getId())).withSelfRel(),
+                        linkTo(methodOn(StudentController.class).find(null)).withRel("students").expand()))
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
 
-	@GetMapping("/students/search")
-	public String initSearchForm(Map<String, Object> model) {
-		model.put("student", new Student());
-		return "students/findStudents";
-	}
 
-	@GetMapping("/students")
-	public String processSearchForm(Student student, BindingResult result, Map<String, Object> model) {
-		String studentName = student.getName();
-		Collection<Student> results = null;
-		if (studentName == null) {
-			studentName = "";
-			results = this.students.findAllStudents();
-		}
-		else {
-			results = this.students.findByKeyword(studentName);
-		}
 
-		if (results.isEmpty()) {
-			result.rejectValue("name", "notFound", "not found");
-			return "students/findStudents";
-		}
-		else {
-			model.put("selections", results);
-			model.put("title", "关键字“" + studentName + "”共有" + results.size() + "个搜索结果");
-			return "students/studentsList";
-		}
+    @PutMapping("/students/{id}")
+    ResponseEntity<?> updateStudent(@RequestBody Student student, @PathVariable Integer id) {
+        boolean isStudentPresent = repository.findById(id).isPresent();
+        // resource is not existing && resource cannot be created
+        if(!isStudentPresent && id!=repository.getMaxId()+1){
+            return ResponseEntity.status(409).build();
+        }
 
-	}
+        student.setId(id);
+        repository.save(student);
 
-	@GetMapping("/students/new")
-	public String initCreationForm(Map<String, Object> model) {
-		Student student = new Student();
-		model.put("student", student);
-		return "students/createOrUpdateForm";
-	}
+        URI uri = null;
+        try {
+            uri = new URI(linkTo(methodOn(StudentController.class).findOne(id)).withSelfRel().getHref());
+        } catch (URISyntaxException e) {
+            return ResponseEntity.badRequest().body("Unable to update " + student);
+        }
 
-	@PostMapping("/students/new")
-	public String processCreationForm(@Valid Student student, BindingResult result) {
-		if (result.hasErrors()) {
-			return "students/createOrUpdateForm";
-		}
-		else {
-			this.students.save(student);
-			return "redirect:/students/" + student.getId();
-		}
-	}
+        if(isStudentPresent){
+            return ResponseEntity.ok().location(uri).build();
+        }else{
+            return ResponseEntity.created(uri).build();
+        }
+    }
 
-	@GetMapping("/students/{studentId}/edit")
-	public String initUpdateStudentForm(@PathVariable("studentId") String studentId, Model model) {
-		Student student = this.students.findById(studentId);
-		model.addAttribute(student);
-		return "students/createOrUpdateForm";
-	}
-
-	@RequestMapping(value = "/students/{studentId}/delete", method = GET)
-	@ResponseBody
-	public String processDeleteRequest(@PathVariable("studentId") String studentId, Model model) {
-		Student student = this.students.findById(studentId);
-		if (student == null) {
-			return "notfound";
-		}
-		else {
-			this.students.deleteStudent(studentId);
-			return "done";
-		}
-	}
-
-	@GetMapping("/students/{studentId}")
-	public ModelAndView showStudent(@PathVariable("studentId") String studentId) {
-		ModelAndView mav = new ModelAndView("students/studentDetails");
-		Student student = this.students.findById(studentId);
-		mav.addObject(student);
-		return mav;
-	}
-
-	@PostMapping("/students/{id}/edit")
-	public String processUpdateStudentForm(@Valid Student student, BindingResult result,
-			@PathVariable("id") String id) {
-		System.out.println("here1");
-		if (result.hasErrors()) {
-			System.out.println("5");
-			return "students/createOrUpdateForm";
-		}
-		else {
-			System.out.println("here2");
-			if (!id.equals(student.getId())) {
-				this.students.deleteStudent(id);
-			}
-			System.out.println("here3");
-			this.students.save(student);
-			System.out.println("here4");
-			return "redirect:/students/" + student.getId();
-		}
-	}
-
+    @DeleteMapping("/students/{id}")
+    ResponseEntity<?> deleteStudent(@PathVariable Integer id){
+        Optional<Student> optionalStudent = repository.findById(id);
+        if (!optionalStudent.isPresent()){
+            return ResponseEntity.notFound().build();
+        }else{
+            repository.delete(optionalStudent.get());
+            return ResponseEntity.ok().build();
+        }
+    }
 }

@@ -1,5 +1,8 @@
 package com.chenjinchi.studentmanagement.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -8,92 +11,48 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDate;
 
+@Data
 @Entity
+@NoArgsConstructor()
+@AllArgsConstructor
 @Table(name = "students")
 public class Student implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	// @Id
-	// @GeneratedValue(strategy = GenerationType.IDENTITY)
-	// private Integer id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
-	@Id
-	@Column(name = "id")
-	@NotEmpty
-	private String id;
+    @Column(name = "student_id")
+    @NotEmpty
+    private String studentId;
 
-	@Column(name = "name")
-	@NotEmpty
-	private String name;
+    @Column(name = "name")
+    @NotEmpty
+    private String name;
 
-	@Column(name = "birth_date")
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	@NotNull
-	private LocalDate birthDate;
+    @Column(name = "birth_date")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @NotNull
+    private LocalDate birthDate;
 
-	@ManyToOne
-	@JoinColumn(name = "gender_id")
-	private Gender gender;
+    @Column(name = "gender")
+    private String gender;
 
-	@ManyToOne
-	@JoinColumn(name = "native_place_id")
-	private NativePlace nativePlace;
+    @Column(name = "native_place")
+    private String nativePlace;
 
-	@ManyToOne
-	@JoinColumn(name = "department_id")
-	private Department department;
+    @Column(name = "department")
+    private String department;
 
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String studentId) {
-		this.id = studentId;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String studentName) {
-		this.name = studentName;
-	}
-
-	public LocalDate getBirthDate() {
-		return birthDate;
-	}
-
-	public void setBirthDate(LocalDate birthDate) {
-		this.birthDate = birthDate;
-	}
-
-	public static long getSerialVersionUID() {
-		return serialVersionUID;
-	}
-
-	public Gender getGender() {
-		return gender;
-	}
-
-	public void setGender(Gender gender) {
-		this.gender = gender;
-	}
-
-	public NativePlace getNativePlace() {
-		return nativePlace;
-	}
-
-	public void setNativePlace(NativePlace nativePlace) {
-		this.nativePlace = nativePlace;
-	}
-
-	public Department getDepartment() {
-		return department;
-	}
-
-	public void setDepartment(Department department) {
-		this.department = department;
-	}
+    Student(String studentId, String name, LocalDate birthDate, String gender, String nativePlace, String department) {
+        this.studentId = studentId;
+        this.name = name;
+        this.birthDate = birthDate;
+        this.gender = gender;
+        this.nativePlace = nativePlace;
+        this.department = department;
+    }
 
 }
