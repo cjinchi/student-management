@@ -1,8 +1,5 @@
 package com.chenjinchi.studentmanagement.controller;
 
-import com.chenjinchi.studentmanagement.model.Department;
-import com.chenjinchi.studentmanagement.model.Gender;
-import com.chenjinchi.studentmanagement.model.NativePlace;
 import com.chenjinchi.studentmanagement.model.Student;
 import com.chenjinchi.studentmanagement.repository.StudentRepository;
 import org.springframework.stereotype.Controller;
@@ -24,21 +21,6 @@ public class StudentController {
 
 	public StudentController(StudentRepository studentService) {
 		this.students = studentService;
-	}
-
-	@ModelAttribute("genders")
-	public Collection<Gender> populateGenders() {
-		return this.students.findGender();
-	}
-
-	@ModelAttribute("departments")
-	public Collection<Department> populateDepartments() {
-		return this.students.findDepartment();
-	}
-
-	@ModelAttribute("native_places")
-	public Collection<NativePlace> populateNativePlaces() {
-		return this.students.findNativePlace();
 	}
 
 	@GetMapping("/")

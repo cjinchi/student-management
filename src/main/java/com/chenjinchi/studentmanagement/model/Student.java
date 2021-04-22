@@ -14,10 +14,6 @@ public class Student implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	// @Id
-	// @GeneratedValue(strategy = GenerationType.IDENTITY)
-	// private Integer id;
-
 	@Id
 	@Column(name = "id")
 	@NotEmpty
@@ -32,17 +28,17 @@ public class Student implements Serializable {
 	@NotNull
 	private LocalDate birthDate;
 
-	@ManyToOne
-	@JoinColumn(name = "gender_id")
-	private Gender gender;
+	@Column(name = "gender")
+	@NotNull
+	private String gender;
 
-	@ManyToOne
-	@JoinColumn(name = "native_place_id")
-	private NativePlace nativePlace;
+	@Column(name = "native_place")
+	@NotNull
+	private String nativePlace;
 
-	@ManyToOne
-	@JoinColumn(name = "department_id")
-	private Department department;
+	@Column(name = "department")
+	@NotNull
+	private String department;
 
 	public String getId() {
 		return id;
@@ -72,28 +68,27 @@ public class Student implements Serializable {
 		return serialVersionUID;
 	}
 
-	public Gender getGender() {
+	public String getGender() {
 		return gender;
 	}
 
-	public void setGender(Gender gender) {
+	public void setGender(String gender) {
 		this.gender = gender;
 	}
 
-	public NativePlace getNativePlace() {
+	public String getNativePlace() {
 		return nativePlace;
 	}
 
-	public void setNativePlace(NativePlace nativePlace) {
+	public void setNativePlace(String nativePlace) {
 		this.nativePlace = nativePlace;
 	}
 
-	public Department getDepartment() {
+	public String getDepartment() {
 		return department;
 	}
 
-	public void setDepartment(Department department) {
+	public void setDepartment(String department) {
 		this.department = department;
 	}
-
 }

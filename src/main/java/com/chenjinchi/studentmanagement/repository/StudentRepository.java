@@ -1,8 +1,5 @@
 package com.chenjinchi.studentmanagement.repository;
 
-import com.chenjinchi.studentmanagement.model.Department;
-import com.chenjinchi.studentmanagement.model.Gender;
-import com.chenjinchi.studentmanagement.model.NativePlace;
 import com.chenjinchi.studentmanagement.model.Student;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -15,18 +12,6 @@ import java.util.List;
 
 public interface StudentRepository extends Repository<Student, Integer> {
 
-	@Query("SELECT gender FROM Gender gender")
-	@Transactional(readOnly = true)
-	List<Gender> findGender();
-
-	@Query("SELECT department FROM Department department")
-	@Transactional(readOnly = true)
-	List<Department> findDepartment();
-
-	@Query("SELECT native_place FROM NativePlace native_place")
-	@Transactional(readOnly = true)
-	List<NativePlace> findNativePlace();
-
 	@Query("SELECT student FROM Student student WHERE student.id =:studentId")
 	@Transactional(readOnly = true)
 	Student findById(@Param("studentId") String studentId);
@@ -35,7 +20,7 @@ public interface StudentRepository extends Repository<Student, Integer> {
 	@Transactional(readOnly = true)
 	Collection<Student> findAllStudents();
 
-	@Query("SELECT student FROM Student student  WHERE lower(concat(student.id,student.name,student.nativePlace.name,student.gender,student.department.name) ) LIKE lower(concat('%',:keyword,'%') ) ")
+	@Query("SELECT student FROM Student student  WHERE lower(concat(student.id,student.name,student.nativePlace,student.gender,student.department) ) LIKE lower(concat('%',:keyword,'%') ) ")
 	@Transactional(readOnly = true)
 	Collection<Student> findByKeyword(@Param("keyword") String keyword);
 
