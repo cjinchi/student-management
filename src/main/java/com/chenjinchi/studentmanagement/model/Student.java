@@ -32,13 +32,25 @@ public class Student implements Serializable {
 	@NotNull
 	private String gender;
 
-	@Column(name = "native_place")
+	@Column(name = "phone")
 	@NotNull
-	private String nativePlace;
+	private String phone;
 
 	@Column(name = "department")
 	@NotNull
 	private String department;
+
+	public Student() {
+	}
+
+	public Student(String id, String name, LocalDate birthDate, String gender, String phone, String department) {
+		this.id = id;
+		this.name = name;
+		this.birthDate = birthDate;
+		this.gender = gender;
+		this.phone = phone;
+		this.department = department;
+	}
 
 	public String getId() {
 		return id;
@@ -76,12 +88,12 @@ public class Student implements Serializable {
 		this.gender = gender;
 	}
 
-	public String getNativePlace() {
-		return nativePlace;
+	public String getPhone() {
+		return phone;
 	}
 
-	public void setNativePlace(String nativePlace) {
-		this.nativePlace = nativePlace;
+	public void setPhone(String nativePlace) {
+		this.phone = nativePlace;
 	}
 
 	public String getDepartment() {
@@ -91,4 +103,5 @@ public class Student implements Serializable {
 	public void setDepartment(String department) {
 		this.department = department;
 	}
+
 }

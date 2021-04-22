@@ -34,3 +34,8 @@ mvn spring-boot:run
 
 2. https://njuics.github.io/sa-2021/04-mvc.html
 3. https://www.bilibili.com/video/BV1ME411x7SH?t=762&p=6
+
+
+
+-------------------
+https://www.petrikainulainen.net/programming/spring-framework/spring-batch-tutorial-reading-information-from-an-excel-file/
