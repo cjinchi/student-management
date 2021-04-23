@@ -40,6 +40,18 @@ public class Student implements Serializable {
 	@NotNull
 	private String department;
 
+	public Student() {
+	}
+
+	public Student(String id, String name, LocalDate birthDate, String gender, String phone, String department) {
+		this.id = id;
+		this.name = name;
+		this.birthDate = birthDate;
+		this.gender = gender;
+		this.phone = phone;
+		this.department = department;
+	}
+
 	public String getId() {
 		return id;
 	}
