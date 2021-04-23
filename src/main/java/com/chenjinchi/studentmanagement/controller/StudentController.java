@@ -110,19 +110,15 @@ public class StudentController {
 	@PostMapping("/students/{id}/edit")
 	public String processUpdateStudentForm(@Valid Student student, BindingResult result,
 			@PathVariable("id") String id) {
-		System.out.println("here1");
 		if (result.hasErrors()) {
 			System.out.println("5");
 			return "students/createOrUpdateForm";
 		}
 		else {
-			System.out.println("here2");
 			if (!id.equals(student.getId())) {
 				this.students.deleteStudent(id);
 			}
-			System.out.println("here3");
 			this.students.save(student);
-			System.out.println("here4");
 			return "redirect:/students/" + student.getId();
 		}
 	}

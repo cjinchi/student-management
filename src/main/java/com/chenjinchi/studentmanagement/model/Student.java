@@ -32,9 +32,9 @@ public class Student implements Serializable {
 	@NotNull
 	private String gender;
 
-	@Column(name = "native_place")
+	@Column(name = "phone")
 	@NotNull
-	private String nativePlace;
+	private String phone;
 
 	@Column(name = "department")
 	@NotNull
@@ -76,12 +76,12 @@ public class Student implements Serializable {
 		this.gender = gender;
 	}
 
-	public String getNativePlace() {
-		return nativePlace;
+	public String getPhone() {
+		return phone;
 	}
 
-	public void setNativePlace(String nativePlace) {
-		this.nativePlace = nativePlace;
+	public void setPhone(String phone) {
+		this.phone = phone;
 	}
 
 	public String getDepartment() {

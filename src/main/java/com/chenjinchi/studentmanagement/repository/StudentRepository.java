@@ -20,7 +20,7 @@ public interface StudentRepository extends Repository<Student, Integer> {
 	@Transactional(readOnly = true)
 	Collection<Student> findAllStudents();
 
-	@Query("SELECT student FROM Student student  WHERE lower(concat(student.id,student.name,student.nativePlace,student.gender,student.department) ) LIKE lower(concat('%',:keyword,'%') ) ")
+	@Query("SELECT student FROM Student student  WHERE lower(concat(student.id,student.name,student.phone,student.gender,student.department) ) LIKE lower(concat('%',:keyword,'%') ) ")
 	@Transactional(readOnly = true)
 	Collection<Student> findByKeyword(@Param("keyword") String keyword);
 
