@@ -6,18 +6,18 @@ import org.springframework.batch.extensions.excel.support.rowset.RowSet;
 
 public class StudentExcelRowMapper implements RowMapper<Student> {
 
-    @Override
-    public Student mapRow(RowSet rowSet) throws Exception {
+	@Override
+	public Student mapRow(RowSet rowSet) throws Exception {
 
-        String[] cols = rowSet.getCurrentRow();
-        Student student = new Student();
+		String[] cols = rowSet.getCurrentRow();
+		Student student = new Student();
 
-        student.setId(cols[0]);
-        student.setName(cols[1]);
-        student.setDepartment(cols[2]);
-        student.setPhone(cols[3]);
+		student.setId(cols[0]);
+		student.setName(cols[1]);
+		student.setDepartment(cols[2]);
+		student.setPhone(cols[3]);
 
-        return student;
-    }
+		return student;
+	}
 
 }

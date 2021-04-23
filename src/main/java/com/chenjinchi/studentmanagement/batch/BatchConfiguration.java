@@ -29,47 +29,45 @@ import javax.sql.DataSource;
 @EnableBatchProcessing
 public class BatchConfiguration {
 
-    @Autowired
-    public JobBuilderFactory jobBuilderFactory;
+	@Autowired
+	public JobBuilderFactory jobBuilderFactory;
 
-    @Autowired
-    public StepBuilderFactory stepBuilderFactory;
+	@Autowired
+	public StepBuilderFactory stepBuilderFactory;
 
-    @Bean
-    public PoiItemReader<Student> reader() {
-        PoiItemReader<Student> reader = new PoiItemReader<>();
-        reader.setName("studentItemReader");
-        reader.setResource(new FileSystemResource("src/main/resources/测试数据.xlsx"));
-        reader.setLinesToSkip(1);
-        reader.setRowMapper(new StudentExcelRowMapper());
-        return reader;
+	@Bean
+	public PoiItemReader<Student> reader() {
+		PoiItemReader<Student> reader = new PoiItemReader<>();
+		reader.setName("studentItemReader");
+		reader.setResource(new FileSystemResource("src/main/resources/测试数据.xlsx"));
+		reader.setLinesToSkip(1);
+		reader.setRowMapper(new StudentExcelRowMapper());
+		return reader;
 
-    }
+	}
 
-    @Bean
-    public StudentItemProcessor processor() {
-        return new StudentItemProcessor();
-    }
+	@Bean
+	public StudentItemProcessor processor() {
+		return new StudentItemProcessor();
+	}
 
-    @Bean
-    public JdbcBatchItemWriter<Student> writer(DataSource dataSource) {
-        return new JdbcBatchItemWriterBuilder<Student>()
-                .itemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>())
-                .sql("INSERT INTO students VALUES (:id, :name, :birthDate, :gender, :phone, :department)")
-                .dataSource(dataSource).build();
-    }
+	@Bean
+	public JdbcBatchItemWriter<Student> writer(DataSource dataSource) {
+		return new JdbcBatchItemWriterBuilder<Student>()
+				.itemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>())
+				.sql("INSERT INTO students VALUES (:id, :name, :birthDate, :gender, :phone, :department)")
+				.dataSource(dataSource).build();
+	}
 
-    @Bean
-    public Step step1(JdbcBatchItemWriter<Student> writer) {
-        return stepBuilderFactory.get("step1").<Student, Student>chunk(1).reader(reader()).processor(processor())
-                .writer(writer).build();
-    }
+	@Bean
+	public Step step1(JdbcBatchItemWriter<Student> writer) {
+		return stepBuilderFactory.get("step1").<Student, Student>chunk(1).reader(reader()).processor(processor())
+				.writer(writer).build();
+	}
 
-    @Bean
-    public Job importStudentJob(Step step1) {
-        return jobBuilderFactory.get("importStudentJob").incrementer(new RunIdIncrementer()).flow(step1).end().build();
-    }
-
-
+	@Bean
+	public Job importStudentJob(Step step1) {
+		return jobBuilderFactory.get("importStudentJob").incrementer(new RunIdIncrementer()).flow(step1).end().build();
+	}
 
 }
